@@ -1,0 +1,156 @@
+/*
+ Adaptive Multi-Cell Battery Intelligence Engine
+ ESP32 + 4 Potentiometers
+*/
+
+const int cellPins[4] = {32, 33, 34, 35};
+
+float cellVoltage[4];
+
+float packVoltage;
+float averageVoltage;
+
+int weakestCell;
+int strongestCell;
+
+float weakestVoltage;
+float strongestVoltage;
+
+float imbalance;
+
+String batteryHealth;
+
+const float MAX_CELL_VOLTAGE = 4.2;
+
+void readCells()
+{
+  for (int i = 0; i < 4; i++)
+  {
+    int adc = analogRead(cellPins[i]);
+
+    cellVoltage[i] = ((float)adc / 4095.0) * MAX_CELL_VOLTAGE;
+  }
+}
+
+void calculatePack()
+{
+  packVoltage = 0;
+
+  weakestVoltage = cellVoltage[0];
+  strongestVoltage = cellVoltage[0];
+
+  weakestCell = 0;
+  strongestCell = 0;
+
+  for (int i = 0; i < 4; i++)
+  {
+    packVoltage += cellVoltage[i];
+
+    if (cellVoltage[i] < weakestVoltage)
+    {
+      weakestVoltage = cellVoltage[i];
+      weakestCell = i;
+    }
+
+    if (cellVoltage[i] > strongestVoltage)
+    {
+      strongestVoltage = cellVoltage[i];
+      strongestCell = i;
+    }
+  }
+
+  averageVoltage = packVoltage / 4.0;
+
+  imbalance =
+      ((strongestVoltage - weakestVoltage) / averageVoltage) * 100.0;
+}
+
+void batteryDiagnosis()
+{
+  if (weakestVoltage < 2.8)
+  {
+    batteryHealth = "PACK FAILURE";
+  }
+  else if (imbalance >= 10)
+  {
+    batteryHealth = "CRITICAL IMBALANCE";
+  }
+  else if (imbalance >= 5)
+  {
+    batteryHealth = "MINOR IMBALANCE";
+  }
+  else
+  {
+    batteryHealth = "HEALTHY";
+  }
+}
+
+void displayReport()
+{
+  Serial.println("--------------------------------------");
+
+  for (int i = 0; i < 4; i++)
+  {
+    Serial.print("Cell ");
+    Serial.print(i + 1);
+    Serial.print(": ");
+    Serial.print(cellVoltage[i], 2);
+    Serial.println(" V");
+  }
+
+  Serial.println();
+
+  Serial.print("Pack Voltage : ");
+  Serial.print(packVoltage, 2);
+  Serial.println(" V");
+
+  Serial.print("Average Cell : ");
+  Serial.print(averageVoltage, 2);
+  Serial.println(" V");
+
+  Serial.print("Weakest Cell : ");
+  Serial.print(weakestCell + 1);
+  Serial.print(" (");
+  Serial.print(weakestVoltage, 2);
+  Serial.println(" V)");
+
+  Serial.print("Strongest Cell : ");
+  Serial.print(strongestCell + 1);
+  Serial.print(" (");
+  Serial.print(strongestVoltage, 2);
+  Serial.println(" V)");
+
+  Serial.print("Imbalance : ");
+  Serial.print(imbalance, 2);
+  Serial.println(" %");
+
+  Serial.print("Battery Health : ");
+  Serial.println(batteryHealth);
+
+  Serial.println("--------------------------------------");
+}
+
+void setup()
+{
+  Serial.begin(115200);
+
+  analogReadResolution(12);
+
+  for (int i = 0; i < 4; i++)
+  {
+    pinMode(cellPins[i], INPUT);
+  }
+}
+
+void loop()
+{
+  readCells();
+
+  calculatePack();
+
+  batteryDiagnosis();
+
+  displayReport();
+
+  delay(1000);
+}
