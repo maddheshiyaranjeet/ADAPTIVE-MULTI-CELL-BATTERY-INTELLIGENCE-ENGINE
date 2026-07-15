@@ -9,7 +9,7 @@ An intelligent Battery Management System (BMS) prototype built using the ESP32 m
 
 ---
 
-## 📖 Overview
+## 📖 Overview 
 
 The **Adaptive Multi-Cell Battery Intelligence Engine** demonstrates the core functionality of a modern Battery Management System (BMS). Instead of using real battery cells, four potentiometers simulate individual cell voltages, allowing safe testing and development of battery monitoring algorithms.
 
