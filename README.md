@@ -1,7 +1,7 @@
 # ADAPTIVE-MULTI-CELL-BATTERY-INTELLIGENCE-ENGINE
 An intelligent battery management system (BMS) designed to monitor, analyze, and optimize the performance of multi-cell battery packs in real time. This project combines embedded systems, sensor data acquisition, and adaptive algorithms to improve battery safety, efficiency, and lifespan.
 
-# 🔋 Adaptive Multi-Cell Battery Intelligence Engine
+# 🔋 Adaptive Multi-Cell Battery Intelligence Engine 
 
 **ESP32-Based Multi-Cell Voltage Monitoring & Diagnostics System**
 
