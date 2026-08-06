@@ -3,7 +3,7 @@ An intelligent battery management system (BMS) designed to monitor, analyze, and
 
 # 🔋 Adaptive Multi-Cell Battery Intelligence Engine 
 
-**ESP32-Based Multi-Cell Voltage Monitoring & Diagnostics System** 
+**ESP32-Based Multi-Cell Voltage Monitoring & Diagnostics System**  
 
 An intelligent Battery Management System (BMS) prototype built using the ESP32 microcontroller. This project continuously monitors the voltage of four simulated battery cells, calculates pack statistics, detects cell imbalance, and provides real-time battery health diagnostics through the Serial Monitor.
 
